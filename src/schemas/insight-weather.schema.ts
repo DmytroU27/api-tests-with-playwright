@@ -92,6 +92,7 @@ export const insightWeatherResponseSchema: Schema = {
       type: 'array',
       items: { type: 'string', pattern: '^\\d+$' },
       minItems: 1,
+      maxItems: 7,
     },
     validity_checks: validityChecksSchema,
   },

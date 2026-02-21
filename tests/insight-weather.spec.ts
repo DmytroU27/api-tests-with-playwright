@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { ApiClient } from '@api';
 import { insightWeatherResponseSchema } from '@schemas/insight-weather.schema';
 import { validateResponseBySchema } from "@utils/response-validator";
+import { text } from 'stream/consumers';
 
 /**
  * InSight Mars Weather Service API
@@ -37,20 +38,27 @@ test.describe('GET insight_weather', () => {
     expect(contentType).toMatch(/application\/json/);
   });
 
-  test('should return between 1 and 7 sols (last seven available per API docs)', async () => {
-    const res = await apiClient.insightController.getWeather();
-    const body = await res.json();
+  test('should return "API_KEY_INVALID" error', async () => {
+    const res = await apiClient.insightController.getWeather({ apiKey: 'invalid' });
+    expect(res.status()).toBe(403);
 
-    expect(body.sol_keys.length).toBeGreaterThanOrEqual(1);
-    expect(body.sol_keys.length).toBeLessThanOrEqual(7);
+    const body = await res.json();
+    expect(body).toEqual({
+      error: {
+        code: "API_KEY_INVALID",
+        message: "An invalid api_key was supplied. Get one at https://api.nasa.gov:443",
+      }
+    })
   });
 
-  test('every sol in sol_keys should have a corresponding data object', async () => {
-    const res = await apiClient.insightController.getWeather();
-    const body = await res.json();
+  test('should return "not found" message for invalid feedtype', async () => {
+    const res = await apiClient.insightController.getWeather({ feedtype: 'xml' });
+    expect(res.status()).toBe(200);
 
-    for (const solKey of body.sol_keys) {
-      expect(body[solKey], `Missing data for sol ${solKey}`).toBeDefined();
-    }
+    const text = await res.text();
+    const expectedMessage =
+      'Message: This page was not found. If you feel that you\'ve came to an error, please contact us at: Please contact us at mars.nasa.gov/feedback (404)';
+    expect(text).toContain('<rssInfo>');
+    expect(text).toContain(expectedMessage);
   });
 });
