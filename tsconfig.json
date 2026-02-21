@@ -11,7 +11,11 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@env": ["./env"]
+      "@env": ["./env.ts"],
+      "@api": ["./src/api-client.ts"],
+      "@controllers/*": ["./src/controllers/*"],
+      "@schemas/*": ["./src/schemas/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   },
   "include": ["**/*.ts"],
