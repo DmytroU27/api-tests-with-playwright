@@ -1,0 +1,21 @@
+{
+  "name": "api-tests-with-playwright",
+  "version": "1.0.0",
+  "description": "Tests for NASA open API",
+  "scripts": {
+    "test": "cross-env NODE_OPTIONS=-r tsconfig-paths/register playwright test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint ."
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.3.0",
+    "dotenv": "^16.4.5",
+    "eslint": "^10.0.1",
+    "prettier": "^3.8.1",
+    "typescript-eslint": "^8.18.0"
+  }
+}
