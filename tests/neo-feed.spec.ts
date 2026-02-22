@@ -1,5 +1,4 @@
-import { test, expect } from '@playwright/test';
-import { ApiClient } from '@api';
+import { test, expect } from './fixtures/base';
 import { neoFeedResponseSchema } from '@schemas/neo-feed.schema';
 import { validateResponseBySchema } from '@utils/response-validator';
 
@@ -11,34 +10,30 @@ import { validateResponseBySchema } from '@utils/response-validator';
  */
 
 test.describe('GET neo feed request', () => {
-  let apiClient: ApiClient;
-
-  test.beforeEach(({ request }) => {
-    apiClient = new ApiClient(request);
-  });
-
-  test('should return 200 OK', async () => {
-    const res = await apiClient.neoController.getFeed({ startDate: '2026-09-07' });
+  test('should return 200 OK', async ({ api }) => {
+    const res = await api.neoController.getFeed({ startDate: '2026-09-07' });
     expect(res.status()).toBe(200);
   });
 
-  test('should return JSON that matches the schema', async () => {
-    const res = await apiClient.neoController.getFeed({ startDate: '2026-09-07' });
+  test('should return JSON that matches the schema', async ({ api }) => {
+    const res = await api.neoController.getFeed({ startDate: '2026-09-07' });
     expect(res.ok()).toBeTruthy();
 
     const body = await res.json();
     validateResponseBySchema(body, neoFeedResponseSchema);
   });
 
-  test('should return application/json', async () => {
-    const res = await apiClient.neoController.getFeed({ startDate: '2026-09-07' });
+  test('should return application/json', async ({ api }) => {
+    const res = await api.neoController.getFeed({ startDate: '2026-09-07' });
     const contentType = res.headers()['content-type'];
     expect(contentType).toMatch(/application\/json/);
   });
 
-  test('should return data for 7 days after start_date, when end_date is omitted', async () => {
+  test('should return data for 7 days after start_date, when end_date is omitted', async ({
+    api,
+  }) => {
     const startDate = '2026-09-07';
-    const res = await apiClient.neoController.getFeed({ startDate });
+    const res = await api.neoController.getFeed({ startDate });
     expect(res.status()).toBe(200);
 
     const body = await res.json();
@@ -52,8 +47,8 @@ test.describe('GET neo feed request', () => {
     }
   });
 
-  test('should accept start_date and end_date range', async () => {
-    const res = await apiClient.neoController.getFeed({
+  test('should accept start_date and end_date range', async ({ api }) => {
+    const res = await api.neoController.getFeed({
       startDate: '2026-09-07',
       endDate: '2026-09-10',
     });
@@ -69,8 +64,10 @@ test.describe('GET neo feed request', () => {
     }
   });
 
-  test('should return "API_KEY_INVALID" error when api_key is invalid', async () => {
-    const res = await apiClient.neoController.getFeed({
+  test('should return "API_KEY_INVALID" error when api_key is invalid', async ({
+    api,
+  }) => {
+    const res = await api.neoController.getFeed({
       apiKey: 'invalid',
       startDate: '2026-09-07',
     });
