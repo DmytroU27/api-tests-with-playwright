@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Tests for NASA open API",
   "scripts": {
-    "test": "cross-env NODE_OPTIONS=-r tsconfig-paths/register playwright test",
+    "test": "npx playwright test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint ."
