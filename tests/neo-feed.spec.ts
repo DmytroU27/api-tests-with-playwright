@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures/base';
+import { test, expect } from './fixtures/base.fixture';
 import { neoFeedResponseSchema } from '@schemas/neo-feed.schema';
 import { validateResponseBySchema } from '@utils/response-validator';
 

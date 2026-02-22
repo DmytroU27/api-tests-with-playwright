@@ -19,7 +19,6 @@ const pageSchema: Schema = {
 };
 
 export const neoBrowseResponseSchema: Schema = {
-  $schema: 'http://json-schema.org/draft-07/schema#',
   type: 'object',
   required: ['links', 'page', 'near_earth_objects'],
   properties: {

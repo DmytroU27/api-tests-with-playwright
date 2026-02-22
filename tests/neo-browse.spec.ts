@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures/base';
+import { test, expect } from './fixtures/base.fixture';
 import { neoBrowseResponseSchema } from '@schemas/neo-browse.schema';
 import { validateResponseBySchema } from '@utils/response-validator';
 

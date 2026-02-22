@@ -1,7 +1,8 @@
 /**
- * JSON Schema for Asteroids NeoWs - Neo - Feed API response.
+ * JSON Schema for Asteroids NeoWs - Neo - Lookup API response.
  * @see https://api.nasa.gov/
- * Based on response structure from GET /neo/rest/v1/feed
+ * GET /neo/rest/v1/neo/{asteroid_id} - Look up a specific Asteroid by NASA JPL small body ID.
+ * Response is a single NEO object (same shape as in Feed/Browse).
  */
 
 import { Schema } from 'ajv';
@@ -80,7 +81,7 @@ const closeApproachItemSchema: Schema = {
   additionalProperties: true,
 };
 
-const neoObjectSchema: Schema = {
+export const neoLookupResponseSchema: Schema = {
   type: 'object',
   properties: {
     links: linksSchema,
@@ -109,25 +110,5 @@ const neoObjectSchema: Schema = {
     'close_approach_data',
     'is_sentry_object',
   ],
-  additionalProperties: true,
-};
-
-export const neoFeedResponseSchema: Schema = {
-  type: 'object',
-  required: ['links', 'element_count', 'near_earth_objects'],
-  properties: {
-    links: linksSchema,
-    element_count: { type: 'number' },
-    near_earth_objects: {
-      type: 'object',
-      patternProperties: {
-        '^\\d{4}-\\d{2}-\\d{2}$': {
-          type: 'array',
-          items: neoObjectSchema,
-        },
-      },
-      additionalProperties: false,
-    },
-  },
   additionalProperties: true,
 };

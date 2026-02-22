@@ -5,6 +5,7 @@ import { BaseController } from './base.controller';
  * @see https://api.nasa.gov/
  * - Neo - Feed: GET /neo/rest/v1/feed
  * - Neo - Browse: GET /neo/rest/v1/neo/browse
+ * - Neo - Lookup: GET /neo/rest/v1/neo/{asteroid_id}
  */
 export class NeoWsController extends BaseController {
   /**
@@ -48,5 +49,22 @@ export class NeoWsController extends BaseController {
     if (size !== undefined) urlParams.set('size', String(size));
 
     return this.request.get(`/neo/rest/v1/neo/browse?${urlParams.toString()}`);
+  }
+
+  /**
+   * Look up a specific Asteroid by its NASA JPL small body ID (SPK-ID).
+   * @param params.asteroidId - NASA JPL small body identifier
+   * @param params.apiKey - Optional override
+   */
+  async getLookup(params: { asteroidId: string; apiKey?: string }) {
+    const { asteroidId, apiKey } = params;
+
+    const urlParams = new URLSearchParams({
+      api_key: apiKey ?? this.apiKey,
+    });
+
+    return this.request.get(
+      `/neo/rest/v1/neo/${asteroidId}?${urlParams.toString()}`
+    );
   }
 }
