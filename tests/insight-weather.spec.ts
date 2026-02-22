@@ -12,7 +12,7 @@ import { text } from 'stream/consumers';
  * Returns per-Sol summary data for the last seven available Sols (Martian days).
  */
 
-test.describe('GET insight_weather', () => {
+test.describe('GET insight weather request', () => {
   let apiClient: ApiClient;
 
   test.beforeEach(({ request }) => {
